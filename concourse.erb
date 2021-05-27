@@ -1,3 +1,4 @@
+# vi:syntax=yaml
 ---
 groups:
   - name: master
@@ -5,7 +6,7 @@ groups:
       - hadolint
       - rubocop
       - shellcheck
-      - rspec
+      # - rspec
       - build-test
       - testinfra
       - docker-build
@@ -18,7 +19,7 @@ groups:
       - hadolint-dev
       - rubocop-dev
       - shellcheck-dev
-      - rspec-dev
+      # - rspec-dev
       - build-test-dev
       - testinfra-dev
 <% end %>
@@ -152,33 +153,34 @@ jobs:
               - |
                 shellcheck resource-git/*.sh
 
-  - name: rspec
-    public: true
-    plan:
-      - get: resource-git
-        trigger: true
-        passed:
-          - rubocop
-          - shellcheck
-      - task: rspec
-        privileged: true
-        config:
-          platform: linux
-          image_resource:
-            type: registry-image
-            source:
-              repository: ((nexus_ip)):((nexus_docker_group_port))/fireblade/rspec
-          inputs:
-            - name: resource-git
-          run:
-            path: sh
-            args:
-              - -exc
-              - |
-                source /docker-lib.sh
-                start_docker
-                cd resource-git
-                rake
+#  - name: rspec
+#    public: true
+#    plan:
+#      - get: resource-git
+#        trigger: true
+#        passed:
+#          - rubocop
+#          - shellcheck
+#      - task: rspec
+#        privileged: true
+#        config:
+#          platform: linux
+#          image_resource:
+#            type: registry-image
+#            source:
+#              repository: ((nexus_ip)):((nexus_docker_group_port))/fireblade/rspec
+#          inputs:
+#            - name: resource-git
+#          run:
+#            path: sh
+#            args:
+#              - -exc
+#              - |
+#                #ls -lh /
+#                #source /docker-lib.sh
+#                #start_docker
+#                cd resource-git
+#                rake
         
   - name: build-test
     public: true
@@ -197,7 +199,7 @@ jobs:
       - get: resource-git
         passed:
           - build-test
-          - rspec
+          # - rspec
         trigger: true
       - task: hello
         config:
@@ -307,33 +309,33 @@ jobs:
               - |
                 shellcheck resource-git-dev/*.sh
 
-  - name: rspec-dev
-    public: true
-    plan:
-      - get: resource-git-dev
-        trigger: true
-        passed:
-          - rubocop-dev
-          - shellcheck-dev
-      - task: rspec
-        privileged: true
-        config:
-          platform: linux
-          image_resource:
-            type: registry-image
-            source:
-              repository: ((nexus_ip)):((nexus_docker_group_port))/fireblade/rspec
-          inputs:
-            - name: resource-git-dev
-          run:
-            path: sh
-            args:
-              - -exc
-              - |
-                source /docker-lib.sh
-                start_docker
-                cd resource-git-dev
-                rake
+#  - name: rspec-dev
+#    public: true
+#    plan:
+#      - get: resource-git-dev
+#        trigger: true
+#        passed:
+#          - rubocop-dev
+#          - shellcheck-dev
+#      - task: rspec
+#        privileged: true
+#        config:
+#          platform: linux
+#          image_resource:
+#            type: registry-image
+#            source:
+#              repository: ((nexus_ip)):((nexus_docker_group_port))/fireblade/rspec
+#          inputs:
+#            - name: resource-git-dev
+#          run:
+#            path: sh
+#            args:
+#              - -exc
+#              - |
+#                source /docker-lib.sh
+#                start_docker
+#                cd resource-git-dev
+#                rake
 
   - name: build-test-dev
     public: true
@@ -352,7 +354,7 @@ jobs:
       - get: resource-git-dev
         passed:
           - build-test-dev
-          - rspec-dev
+          # - rspec-dev
         trigger: true
       - task: hello
         config:
