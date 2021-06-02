@@ -1,11 +1,6 @@
-FROM centos:7
+FROM alpine
 
-# hadolint ignore=DL3033,DL3041
-RUN yum install -y epel-release && \
-    yum install -y dnf && \
-    dnf install -y yamllint && \
-    dnf clean all && \
-    yum clean all
+RUN apt add yamllint
 
 LABEL name yamllint
 LABEL version beta
