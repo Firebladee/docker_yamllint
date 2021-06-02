@@ -2,7 +2,7 @@
 FROM alpine
 
 # hadolint ignore=DL3027
-RUN apt add yamllint
+RUN apk add yamllint
 
 LABEL name yamllint
 LABEL version beta
